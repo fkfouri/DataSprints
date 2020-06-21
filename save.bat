@@ -1,0 +1,1 @@
+jupyter nbconvert DataSprints_Desafio.ipynb --to html  --output output.html
