@@ -38,7 +38,9 @@ Foi criado um step no cluster da EMR para a execução do Script Python.
 Para a execução, rode o seguinte comando:
 ```python aws.py```
 
-Para visualização e reprodução de cada passo do desafio, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
+**O código aws.py além de criar todos os serviços necessários para execução, ao final, também remove todos os serviços. Segere-se avaliar os passos através do Jupyter Notebook.**
+
+Para visualização e reprodução de cada passo do desafio, abrir o arquivo desafio.ipynb através do Jupyter Notebook.
 
 ```jupyter notebook AWS.ipynb```
 
