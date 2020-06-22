@@ -1,15 +1,25 @@
-# TESTE ENGENHEIRO DE DADOS - DataSprints
+# Teste Engenheiro de Dados - DataSprints
 
-## SOBRE ESTE REPOSITORIO
+## Sobre reste repositório.
 
 Este material é parte do processo de seleção para Engenheiros de Dados na DataSprints. 
 
-Para este desafio foi disponibilizado 3 conjuntos de dados contento dados sobre corridas de Taxi na cidade de New York ocorridas entre 2009 e 2012, dados de empresas de Taxi e Mapa de prefixos e os tipos de pagamento.
+Para este desafio foi disponibilizado 3 conjuntos de dados contendo:
+- dados sobre corridas de Taxi na cidade de New York ocorridas entre 2009 e 2012;
+- empresas de Taxi;
+- Prefixos e os tipos de pagamento.
 
 Este repositório contém a resolução dos Quesistos Mínimos e dos Quesistos bônus.
 
 
 ## Instruções para Reprodução de Análises
+Para reprodução local, é necessario o Python ^3.5.
+
+Na pasta principal do repositorio, rodar o seguinte comando:
+
+```python desafio.py```
+
+
 Para reprodução local recomenda-se o uso do Jupyter Notebook, escolha o arquivo desafio.ipynb.
 
  
