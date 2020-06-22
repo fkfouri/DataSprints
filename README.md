@@ -19,19 +19,26 @@ Na pasta principal do repositorio, execute o seguinte comando para execução do
 
 Será criado uma pasta '/output' com os resultados das Questões 1 à 6.
 
-Para reprodução das análises passo a passo, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
+Para visualização e reprodução de cada passo do desafio, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
 
 ```jupyter notebook desafio.ipynb```
 
 Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html'.
 
  
-### Processamento em Cluster
-O arquivo "/cluster/AWS.ipynb" contém uma sequencia de configuração dos servidos da Amazon (S3, Group Resource, EMR) para a criação de um cluster Spark On-Demand formado por um Master e dois Slaves.
+### Processamento em Cluster AWS
+O arquivo "AWS.ipynb" contém uma sequencia de configuração dos servidos da Amazon (S3, Group Resource, EMR) para a criação de um cluster Spark On-Demand formado por um Master e dois Slaves.
 
 A execução deste script requer que o Engenheiro de Dados possua uma conta ativa na AWS e que possua configurado localmente o AWS CLI. 
 
 Esta execução pode causar COBRANÇA da AWS pelo uso dos serviços. É necessario observar o tempo de duração dos serviços para não causar prejuízo. Para efeito de referencia, durante os meus testes, a configuração e a utilização do cluster levou no melhor tempo 8 minutos e no pior tempo cerca de 20 minutos.
 
-Foi criado um step no cluster da EMR para a execução do Script Python. A entrada de dados, o script pyspark e a saída parquet todos foram armazenados no bucket S3.
+Foi criado um step no cluster da EMR para a execução do Script Python. 
+
+Para a execução, rode o seguinte comando:
+```python aws.py```
+
+Para visualização e reprodução de cada passo do desafio, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
+
+```jupyter notebook AWS.ipynb```
 

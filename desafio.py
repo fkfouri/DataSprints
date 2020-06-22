@@ -5,7 +5,16 @@
 # 
 # Este é um desafio dado pela <b><i>data <span style='color: red'>sprints</span></i></b> para avaliação técnica em Engenharia de Dados.
 
-# In[ ]:
+# Instalando as dependencias, importando bibliotecas e configuração inicial.
+
+# In[1]:
+
+
+import warnings
+warnings.filterwarnings('ignore') #para ignorar mensagens de warnings
+
+
+# In[2]:
 
 
 try:
@@ -17,14 +26,7 @@ except:
     print("Running throw py file.")
 
 
-# In[ ]:
-
-
-import warnings
-warnings.filterwarnings('ignore') #para ignorar mensagens de warnings
-
-
-# In[ ]:
+# In[3]:
 
 
 from pyspark import SparkContext as sc
@@ -36,11 +38,12 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import shutil
 
 
 # Criando uma SparkSession
 
-# In[ ]:
+# In[4]:
 
 
 spark = SparkSession        .builder        .appName("Desafio Data Sprints - Fabio Kfouri")        .getOrCreate()
@@ -48,11 +51,11 @@ spark
 
 
 # ## Criação dos Dataframes
-# Referenciando o endereço das fontes. Para desenvolvimento local foi incluido as fontes na pasta <b>/data/</b>.
+# Referenciando o endereço das fontes de dados no Bucket S3 AWS <b>s3://data-sprints-eng-test/</b>. 
 # 
-# Para uso em cluster, sera usado o endereço do Bucket AWS <b>s3://data-sprints-eng-test/</b>.
+# Para desenvolvimento local foi incluido as fontes na pasta <b>/data/</b>.
 
-# In[ ]:
+# In[5]:
 
 
 import os
@@ -64,13 +67,12 @@ if 'E:\\' in os.getcwd() and 'DataSprints' in os.getcwd():
     #dataPath = os.getcwd() + "/data/"
     outPath = os.getcwd() + "/output/"
 
-
 print(dataPath, outPath)
 
 
 # Definiçao dos Arquivos no SparkContext
 
-# In[ ]:
+# In[6]:
 
 
 spark.sparkContext.addFile(dataPath + 'data-payment_lookup-csv.csv')
@@ -81,9 +83,9 @@ spark.sparkContext.addFile(dataPath + 'data-sample_data-nyctaxi-trips-2011-json_
 spark.sparkContext.addFile(dataPath + 'data-sample_data-nyctaxi-trips-2012-json_corrigido.json')
 
 
-# #### Leitura e Correçao da fonte Payment
+# ### Leitura e Correçao da fonte Payment
 
-# In[ ]:
+# In[7]:
 
 
 df_payment = spark.read.csv(SparkFiles.get("data-payment_lookup-csv.csv"), header = True, sep = ",")
@@ -94,7 +96,7 @@ df_payment.show(3)
 # 
 # Utilização do Pandas para a leitura do CSV ignorando a linha de index 0.
 
-# In[ ]:
+# In[8]:
 
 
 temp = pd.read_csv(SparkFiles.get("data-payment_lookup-csv.csv"), skiprows=[0], sep=',', header=None)
@@ -105,7 +107,7 @@ temp.head()
 # - Removendo o registro de Index 0;
 # - Conversao do DataFrame Pandas para um DataFrama Pyspark.
 
-# In[ ]:
+# In[9]:
 
 
 temp.columns = temp.iloc[0]
@@ -116,15 +118,15 @@ df_payment.show(3)
 
 # Criação de view payment
 
-# In[ ]:
+# In[10]:
 
 
 df_payment.createOrReplaceTempView("payment")
 
 
-# #### Leitura da fonte de Vendor
+# ### Leitura da fonte de Vendor
 
-# In[ ]:
+# In[11]:
 
 
 df_vendor = spark.read.csv(SparkFiles.get('data-vendor_lookup-csv.csv'), header = True, sep = ",")
@@ -133,22 +135,22 @@ df_vendor.show()
 
 # Criação da view vendor.
 
-# In[ ]:
+# In[12]:
 
 
 df_vendor.createOrReplaceTempView("vendor")
 
 
-# ## Leitura das corridas de taxi no período de 2009 à 2012
+# ### Leitura das corridas de taxi no período de 2009 à 2012
 
-# In[ ]:
+# In[13]:
 
 
 df_2009 = spark.read.json(SparkFiles.get('data-sample_data-nyctaxi-trips-2009-json_corrigido.json'))
 df_2009.count()
 
 
-# In[ ]:
+# In[14]:
 
 
 df_2010 = spark.read.json(SparkFiles.get('data-sample_data-nyctaxi-trips-2010-json_corrigido.json'))
@@ -159,7 +161,7 @@ df_2012 = spark.read.json(SparkFiles.get('data-sample_data-nyctaxi-trips-2012-js
 # ## Preparação do DataFrame de corridas de taxi.
 # Concatenando todos os dataFrames em único DataFrame e em seguinda verificando o total de linhas do DataFrame.
 
-# In[ ]:
+# In[15]:
 
 
 df = df_2012.union(df_2011).union(df_2010).union(df_2009)
@@ -168,7 +170,7 @@ print("Tamanho do DataFrame concatenado:", df.count(), 'registros')
 
 # Identificando o Schema do DataFrame
 
-# In[ ]:
+# In[16]:
 
 
 df.printSchema()
@@ -176,7 +178,7 @@ df.printSchema()
 
 # Visualizando o aspecto dos dados
 
-# In[ ]:
+# In[17]:
 
 
 df.show(5, truncate = False)
@@ -184,7 +186,7 @@ df.show(5, truncate = False)
 
 # Conversão de colunas [dropoff_datetime, pickup_datetime] do tipo String para tipo TimeStamp.
 
-# In[ ]:
+# In[18]:
 
 
 #DataFrame Convertido (dfc)
@@ -194,15 +196,15 @@ dfc.printSchema()
 
 # Visualizando o aspecto dos dados, em especial os campos dataTime
 
-# In[ ]:
+# In[19]:
 
 
 dfc.show(5, False)
 
 
-# Criando uma view trip.
+# Criando uma view chamada trip.
 
-# In[ ]:
+# In[20]:
 
 
 dfc.createOrReplaceTempView("trip")
@@ -214,7 +216,7 @@ dfc.createOrReplaceTempView("trip")
 # 
 # A distância média (valor arredondado) percorrida por viagens com no máximo 2 passageiros é:
 
-# In[ ]:
+# In[21]:
 
 
 df_question_1 = spark.sql("""
@@ -227,7 +229,7 @@ df_question_1.show()
 
 # Exportando para um arquivo CSV
 
-# In[ ]:
+# In[22]:
 
 
 #try:
@@ -242,7 +244,7 @@ df_question_1.write.csv(outPath + '\question_1.csv')
 # 
 # O resultado em quantidade de dinheiro (valores em Milhões U$) arrecado pelos 3 maiores vendors são:
 
-# In[ ]:
+# In[23]:
 
 
 df_question_2 = spark.sql("""
@@ -257,7 +259,7 @@ df_question_2.show(truncate = False)
 
 # Exportando para um arquivo csv
 
-# In[ ]:
+# In[24]:
 
 
 df_question_2.write.csv(outPath + '\question_2.csv')
@@ -265,7 +267,7 @@ df_question_2.write.csv(outPath + '\question_2.csv')
 
 # ### Questão 3: Um histograma da distribuição mensal, nos 4 anos, de corridas pagas em dinheiro:
 
-# In[ ]:
+# In[25]:
 
 
 df_question_3 = spark.sql("""
@@ -286,13 +288,14 @@ df_question_3 = spark.sql("""
 df_question_3.show()
 
 
-# In[ ]:
+# In[26]:
 
 
+#TRansformando em Pandas
 dados = df_question_3.toPandas()
 
 
-# In[ ]:
+# In[27]:
 
 
 ax = sns.distplot(dados.qty_trip)
@@ -303,14 +306,14 @@ ax.set_title("Distribuiçao de Media de corridas pagas em Dinheiro entre 2009 e 
 ax
 
 
-# In[ ]:
+# In[28]:
 
 
 #Exportando grafico
 ax.figure.savefig(outPath + '\Question_3a.png')
 
 
-# In[ ]:
+# In[29]:
 
 
 fig, ax1 = plt.subplots()
@@ -335,7 +338,7 @@ ax2.tick_params(axis='y', labelcolor=color)
 fig.tight_layout() 
 
 
-# In[ ]:
+# In[30]:
 
 
 #Exportando grafico
@@ -345,7 +348,7 @@ fig.savefig(outPath + '\Question_3b.png')
 # ### Questão 4: Um gráfico de série temporal contando a quantidade de gorjetas de cada dia, nos
 # últimos 3 meses de 2012:
 
-# In[ ]:
+# In[31]:
 
 
 df_question_4 = spark.sql("""
@@ -371,14 +374,15 @@ temp AS (--
 df_question_4.show(5, truncate = False)
 
 
-# In[ ]:
+# In[32]:
 
 
+#tranformando em Pandas
 dados = df_question_4.toPandas()
 dados.head()
 
 
-# In[ ]:
+# In[33]:
 
 
 fig, ax1 = plt.subplots()
@@ -392,7 +396,7 @@ ax1.set_ylabel('Quantidade de Gorjetas')
 ax1.plot(dados.month_year, dados.tips ) 
 
 
-# In[ ]:
+# In[34]:
 
 
 #Exportando grafico
@@ -405,7 +409,7 @@ fig.savefig(outPath + '\Question_4.png')
 # 
 # O tempo médio das corridas no fim de semana é:
 
-# In[ ]:
+# In[35]:
 
 
 df_question_5 = spark.sql("""
@@ -428,7 +432,7 @@ WITH calc as (--
 df_question_5.show(5, False)
 
 
-# In[ ]:
+# In[36]:
 
 
 #Exportando dados
@@ -437,7 +441,7 @@ df_question_5.write.csv(outPath + '\question_5.csv')
 
 # ### Questão 6: Fazer uma visualização em mapa com latitude e longitude de pickups and dropoffs de 2010.
 
-# In[ ]:
+# In[37]:
 
 
 df_question_6 = spark.sql("""
@@ -464,7 +468,7 @@ df_question_6.show(5, False)
 # 
 # Observa-se que os valores mínimo e máximo de latitude e longitude estão bem distantes dos Quartis. 
 
-# In[ ]:
+# In[38]:
 
 
 dados = df_question_6.toPandas()
@@ -473,7 +477,7 @@ dados.describe().round(3)
 
 # Definindo o limite inferior e superior para Latitude.
 
-# In[ ]:
+# In[39]:
 
 
 Q1 = dados['latitude'].quantile(.25)
@@ -486,7 +490,7 @@ print(limite_inferior_latitude, limite_superior_latitude, Q1, Q3)
 
 # Definindo o limite inferior e superior para Longitude.
 
-# In[ ]:
+# In[40]:
 
 
 Q1 = dados['longitude'].quantile(.25)
@@ -499,7 +503,7 @@ print(limite_inferior_longitude, limite_superior_longitude, Q1, Q3)
 
 # Aplicando a limpeza do DataSet pelos limites calculados de Latitude e Longetude.
 
-# In[ ]:
+# In[41]:
 
 
 selecao = (dados['latitude'] >= limite_inferior_latitude) & (dados['latitude']<= limite_superior_latitude) &           (dados['longitude'] >= limite_inferior_longitude) & (dados['longitude']<= limite_superior_longitude) 
@@ -508,7 +512,7 @@ dados_new = dados[selecao]
 
 # Este é um check para evidenciar que o novo DataSet é menor que o DataSet original.
 
-# In[ ]:
+# In[42]:
 
 
 print(dados.shape, dados_new.shape)
@@ -516,7 +520,7 @@ print(dados.shape, dados_new.shape)
 
 # Observa-se que no novo Dataset não há inconsistências.
 
-# In[ ]:
+# In[43]:
 
 
 dados_new.describe().round(3)
@@ -524,14 +528,14 @@ dados_new.describe().round(3)
 
 # Seguindo o tutorial https://towardsdatascience.com/easy-steps-to-plot-geographic-data-on-a-map-python-11217859a2db.
 
-# In[ ]:
+# In[44]:
 
 
 print('Latitude:', dados_new['latitude'].min(), 'e', dados_new['latitude'].max())
 print('Longitude:', dados_new['longitude'].min(), 'e', dados_new['longitude'].max())
 
 
-# In[ ]:
+# In[45]:
 
 
 BBox = ((dados_new.longitude.min(), dados_new.longitude.max(),  
@@ -546,13 +550,13 @@ BBox
 # 
 # <center>Imagem de Mapa original</center>
 
-# In[ ]:
+# In[46]:
 
 
 ny_m = plt.imread(os.getcwd() + '/lib/ny_map.png')
 
 
-# In[ ]:
+# In[47]:
 
 
 ref_size = 60
@@ -565,7 +569,7 @@ ax.imshow(ny_m, zorder=0, extent = BBox, aspect= 'equal')
 ax.set_xlabel('Imagem baseada no Mapa original', fontsize=ref_size *.8)
 
 
-# In[ ]:
+# In[48]:
 
 
 fig.savefig(outPath + '\Question_6_map_ny_edited.png', dpi=72)
