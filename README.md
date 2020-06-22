@@ -1,7 +1,5 @@
 # Teste Engenheiro de Dados - DataSprints
 
-## Sobre reste repositório.
-
 Este material é parte do processo de seleção para Engenheiros de Dados na DataSprints. 
 
 Para este desafio foi disponibilizado 3 conjuntos de dados contendo:
@@ -15,12 +13,17 @@ Este repositório contém a resolução dos Quesistos Mínimos e dos Quesistos b
 ## Instruções para Reprodução de Análises
 Para reprodução local, é necessario o Python ^3.5.
 
-Na pasta principal do repositorio, rodar o seguinte comando:
+Na pasta principal do repositorio, execute o seguinte comando para execução dos desafios:
 
 ```python desafio.py```
 
+Será criado uma pasta '/output' com os resultados das Questões 1 à 6.
 
-Para reprodução local recomenda-se o uso do Jupyter Notebook, escolha o arquivo desafio.ipynb.
+Para reprodução das análises passo a passo, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
+
+```jupyter notebook desafio.ipynb```
+
+Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html'.
 
  
 ### Processamento em Cluster
