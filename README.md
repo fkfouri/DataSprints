@@ -9,6 +9,8 @@ Para este desafio foi disponibilizado 3 conjuntos de dados contendo:
 
 Este repositório contém a resolução dos Quesistos Mínimos e dos Quesistos bônus.
 
+Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html' na pasta local, ou através do link https://estudo-aws-fk.s3.amazonaws.com/Analise.html.
+
 
 ## Instruções para Reprodução de Análises
 Para reprodução local, é necessario o Python ^3.5.
@@ -22,8 +24,6 @@ Será criado uma pasta '/output' com os resultados das Questões 1 à 6.
 Para visualização e reprodução de cada passo do desafio, abrir o arquivo desafio.ipynb através do Jupyter Notebbok.
 
 ```jupyter notebook desafio.ipynb```
-
-Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html' na pasta local, ou através do link https://estudo-aws-fk.s3.amazonaws.com/Analise.html.
 
  
 ### Processamento em Cluster AWS
