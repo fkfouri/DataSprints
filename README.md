@@ -23,7 +23,7 @@ Para visualização e reprodução de cada passo do desafio, abrir o arquivo des
 
 ```jupyter notebook desafio.ipynb```
 
-Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html'.
+Todo o conteúdo do desafio pode ser visualizado no browser abrindo o arquivo 'Analise.html' na pasta local, ou através do link https://estudo-aws-fk.s3.amazonaws.com/Analise.html.
 
  
 ### Processamento em Cluster AWS
