@@ -36,6 +36,7 @@ Esta execução pode causar COBRANÇA da AWS pelo uso dos serviços. É necessar
 Foi criado um step no cluster da EMR para a execução do Script Python. 
 
 Para a execução, rode o seguinte comando:
+
 ```python aws.py```
 
 **O código aws.py além de criar todos os serviços necessários para execução, ao final, também remove todos os serviços. Segere-se avaliar os passos através do Jupyter Notebook.**
