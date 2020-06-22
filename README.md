@@ -26,7 +26,7 @@ Para visualização e reprodução de cada passo do desafio, abrir o arquivo des
 ```jupyter notebook desafio.ipynb```
 
  
-### Processamento em Cluster AWS
+## Processamento em Cluster AWS
 O arquivo "AWS.ipynb" contém uma sequencia de configuração dos servidos da Amazon (S3, Group Resource, EMR) para a criação de um cluster Spark On-Demand formado por um Master e dois Slaves.
 
 A execução deste script requer que o Engenheiro de Dados possua uma conta ativa na AWS e que possua configurado localmente o AWS CLI. 
